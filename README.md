@@ -57,3 +57,16 @@ uvicorn app:app --reload
 ```
 
 4. Access the API documentation at `http://localhost:8000/docs`.
+
+### 6. Screenshots
+
+1. How I can build an unbuntu image?
+![alt text](https://raw.githubusercontent.com/rohannaika7/Q-A_chatbot/refs/heads/main/Screenshots/1_ans.png)
+
+2. How I can do it for a specific version?
+![alt text](https://raw.githubusercontent.com/rohannaika7/Q-A_chatbot/refs/heads/main/Screenshots/2_ans.png)
+
+3. Give me the format for the account-key assertion.
+![alt text](https://raw.githubusercontent.com/rohannaika7/Q-A_chatbot/refs/heads/main/Screenshots/3_ans.png)
+   
+
