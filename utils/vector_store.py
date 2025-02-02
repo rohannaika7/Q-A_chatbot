@@ -9,7 +9,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class VectorStore:
+    """
+    A class to manage the creation and loading of a sector using Chroma and HuggingFace embeddings.
+    """
     def __init__(self, persist_directory: str):
+        """
+        Initialize the VectorStore with a directory to persist the vector data.
+
+        :param persist_directory: Directory to store the vector data.
+        """
         self.persist_directory = persist_directory
         self.embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -17,6 +25,12 @@ class VectorStore:
         self.vector_store = None
 
     def create_vector_store(self, documents):
+        """
+        Create a vector store from the provided documents.
+
+        :param documents: List of documents to be embedded and stored.
+        :return: The created vector store.
+        """
         try:
             self.vector_store = Chroma.from_documents(
                 documents=documents,
@@ -32,6 +46,11 @@ class VectorStore:
             raise
 
     def load_vector_store(self):
+        """
+        Load the vector store from the persistant directory.
+
+        :return: The loaded vector store.
+        """
         try:
             self.vector_store = Chroma(
                 persist_directory=self.persist_directory,

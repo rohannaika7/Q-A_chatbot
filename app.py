@@ -16,10 +16,12 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Remove OpenAI API key requirement
 app = FastAPI(title="Q&A Chatbot API")
 
 class Question(BaseModel):
+    """
+    Pydantic model for a question.
+    """
     text: str
     session_id: Optional[str] = None
 
@@ -31,6 +33,9 @@ session_manager = SessionManager()
 
 @app.on_event("startup")
 async def startup_event():
+    """
+    FastAPI: startup event to initialize the application components.
+    """
     global qa_chain
     try:
         documents_path = os.path.abspath("./ubuntu-docs")
@@ -51,11 +56,24 @@ async def startup_event():
 
 @app.post("/create_session")
 async def create_session():
-    session_id = session_manager.create_session()
-    return {"session_id": session_id}
+    """
+    Endpoint to create a new session
+    """
+    try:
+        session_id = session_manager.create_session()
+        return {"session_id": session_id}
+    except Exception as e:
+        logger.error(f"Error creating session: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.post("/ask")
 async def ask_question(question: Question):
+    """
+    Endpoint to ask a question and get an answer.
+
+    :param question: The question to be asked.
+    :return: The answer to teh question ans the session ID.
+    """
     try:
         session_id = question.session_id
         if not session_id:
@@ -84,6 +102,12 @@ async def ask_question(question: Question):
 
 @app.post("/ask_stream")
 async def ask_question_stream(question: Question):
+    """
+    Endpoint to ask a question and get an answer as a stream.
+
+    :param question: The question to be asked.
+    :return: Streaming response with chunks of the answer.
+    """
     try:
         session_id = question.session_id
         if not session_id:
